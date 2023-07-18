@@ -5,8 +5,8 @@ export default function Dashboard() {
     <>
       <div className="flex gap-4">
         <Nav></Nav>
-        <main>
-          <h1 className="text-4xl font-bold">Dashboard</h1>
+        <main className="pt-4">
+          <h1 className="text-4xl font-bold gradient-text">Dashboard</h1>
         </main>
       </div>
     </>

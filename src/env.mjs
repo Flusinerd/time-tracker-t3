@@ -23,6 +23,7 @@ export const env = createEnv({
     // Add `.min(1) on ID and SECRET if you want to make sure they're not empty
     NEXTAUTH_GOOGLE_CLIENT_ID: z.string(),
     NEXTAUTH_GOOGLE_CLIENT_SECRET: z.string(),
+    NEXTAUTH_ALLOWED_EMAIL: z.string()
   },
 
   /**
@@ -45,6 +46,7 @@ export const env = createEnv({
     NEXTAUTH_URL: process.env.NEXTAUTH_URL,
     NEXTAUTH_GOOGLE_CLIENT_ID: process.env.NEXTAUTH_GOOGLE_CLIENT_ID,
     NEXTAUTH_GOOGLE_CLIENT_SECRET: process.env.NEXTAUTH_GOOGLE_CLIENT_SECRET,
+    NEXTAUTH_ALLOWED_EMAIL: process.env.NEXTAUTH_ALLOWED_EMAIL
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation.

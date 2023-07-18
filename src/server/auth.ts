@@ -41,7 +41,7 @@ export const authOptions: NextAuthOptions = {
       console.log(profile);
       if (account?.provider === 'google' && profile) {
         const email_verified = (profile as {email_verified: boolean}).email_verified;
-        const is_datenlotse = profile.email?.endsWith('@datenlotse.org') ?? false;
+        const is_datenlotse = profile.email?.endsWith(env.NEXTAUTH_ALLOWED_EMAIL) ?? false;
         return email_verified && is_datenlotse;
       }
       return false

@@ -29,7 +29,7 @@ export default function Nav() {
             </Link>
           </li>
           <li className="flex h-16 items-center justify-center">
-            <Link href={""}>
+            <Link href={"/tasks"}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 -960 960 960"
