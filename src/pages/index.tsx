@@ -23,7 +23,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="relative flex h-full flex-col items-center gap-4 p-4">
-        <h1 className="gradient-text">
+        <h1 className="gradient-text font-bold text-6xl">
           Welcome to THDS Timetracker
         </h1>
         {status === "authenticated" && (
