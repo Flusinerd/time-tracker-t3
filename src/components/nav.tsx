@@ -18,7 +18,7 @@ export default function Nav() {
       <nav className="box-border flex min-h-screen w-16 flex-col items-center pr-[1px]">
         <ul className="mt-4 flex grow flex-col justify-center">
           <li className="flex h-16 items-center justify-center">
-            <Link href={""}>
+            <Link href={"/time-trackings"}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 -960 960 960"

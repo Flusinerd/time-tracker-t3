@@ -77,115 +77,107 @@ const TasksPage = () => {
   });
 
   return (
-    <>
-      <div className="flex gap-4">
-        <Nav></Nav>
-        <main className="pt-4">
-          <h1 className="gradient-text ml-3 text-4xl font-bold">Tasks</h1>
-          <table className="table mt-8">
-            <thead>
-              <tr>
-                <th>Task</th>
-                <th>Created</th>
-                <th>Updated</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>
-                  <input
-                    type="text"
-                    className="input input-bordered input-primary input-sm"
-                    placeholder="Task Name"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                  />
-                </td>
-                <td></td>
-                <td></td>
-                <td>
-                  <button
-                    className="btn btn-primary btn-xs"
-                    onClick={() => createTask.mutate({ name })}
+    <div className="flex flex-col gap-4">
+      <h1 className="gradient-text ml-3 text-4xl font-bold">Tasks</h1>
+      <table className="table mt-8">
+        <thead>
+          <tr>
+            <th>Task</th>
+            <th>Created</th>
+            <th>Updated</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <input
+                type="text"
+                className="input input-bordered input-primary input-sm"
+                placeholder="Task Name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+            </td>
+            <td></td>
+            <td></td>
+            <td>
+              <button
+                className="btn btn-primary btn-xs"
+                onClick={() => createTask.mutate({ name })}
+              >
+                Create
+              </button>
+            </td>
+          </tr>
+          {tasksQuery.data?.map((task) => (
+            <tr key={task.id}>
+              <td>
+                {editingTaskId === task.id ? (
+                  <form
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      handleSaveClick(task.id, newNameRef.current?.value ?? "");
+                    }}
                   >
-                    Create
-                  </button>
-                </td>
-              </tr>
-              {tasksQuery.data?.map((task) => (
-                <tr key={task.id}>
-                  <td>
-                    {editingTaskId === task.id ? (
-                      <form
-                        onSubmit={(e) => {
-                          e.preventDefault();
-                          handleSaveClick(
-                            task.id,
-                            newNameRef.current?.value ?? ""
-                          );
-                        }}
-                      >
-                        <input
-                          type="text"
-                          className="input input-bordered input-primary input-sm"
-                          name="name"
-                          defaultValue={task.name}
-                          autoFocus
-                          ref={newNameRef}
-                        />
-                      </form>
-                    ) : (
-                      task.name
-                    )}
-                  </td>
-                  <td>{task.createdAt.toLocaleDateString()}</td>
-                  <td>{task.updatedAt.toLocaleDateString()}</td>
-                  <td className="flex gap-2">
-                    {editingTaskId === task.id ? (
-                      <>
-                        <button
-                          className="btn btn-primary btn-xs"
-                          onClick={() =>
-                            handleSaveClick(
-                              task.id,
-                              newNameRef.current?.value ?? ""
-                            )
-                          }
-                        >
-                          Save
-                        </button>
-                        <button
-                          className="btn btn-error btn-xs"
-                          onClick={() => handleCancelClick()}
-                        >
-                          Discard
-                        </button>
-                      </>
-                    ) : (
-                      <>
-                        <button
-                          className="btn btn-primary btn-xs"
-                          onClick={() => handleEditClick(task.id)}
-                        >
-                          Edit
-                        </button>
-                        <button
-                          className="btn btn-error btn-xs"
-                          onClick={() => deleteTask.mutate(task.id)}
-                        >
-                          Delete
-                        </button>
-                      </>
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </main>
-      </div>
-    </>
+                    <input
+                      type="text"
+                      className="input input-bordered input-primary input-sm"
+                      name="name"
+                      defaultValue={task.name}
+                      autoFocus
+                      ref={newNameRef}
+                    />
+                  </form>
+                ) : (
+                  task.name
+                )}
+              </td>
+              <td>{task.createdAt.toLocaleDateString()}</td>
+              <td>{task.updatedAt.toLocaleDateString()}</td>
+              <td className="flex gap-2">
+                {editingTaskId === task.id ? (
+                  <>
+                    <button
+                      className="btn btn-primary btn-xs"
+                      onClick={() =>
+                        handleSaveClick(
+                          task.id,
+                          newNameRef.current?.value ?? ""
+                        )
+                      }
+                    >
+                      Save
+                    </button>
+                    <button
+                      className="btn btn-error btn-xs"
+                      onClick={() => handleCancelClick()}
+                    >
+                      Discard
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <button
+                      className="btn btn-primary btn-xs"
+                      onClick={() => handleEditClick(task.id)}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      className="btn btn-error btn-xs"
+                      onClick={() => deleteTask.mutate(task.id)}
+                    >
+                      Delete
+                    </button>
+                  </>
+                )}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 };
 
