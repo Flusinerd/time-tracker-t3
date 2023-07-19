@@ -1,7 +1,5 @@
 import { useSession } from "next-auth/react";
-import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
 
 export default function Nav() {
   const { status } = useSession();
@@ -16,7 +14,7 @@ export default function Nav() {
         }
       `}</style>
       <nav className="box-border flex min-h-screen w-16 flex-col items-center pr-[1px]">
-        <ul className="mt-4 flex grow flex-col justify-center">
+        <ul className="mt-4 flex grow flex-col justify-start items-center">
           <li className="flex h-16 items-center justify-center">
             <Link href={"/time-trackings"}>
               <svg
