@@ -2,7 +2,40 @@
 @tailwind components;
 @tailwind utilities;
 
-
 .gradient-text {
-  @apply bg-gradient-to-br from-primary to-secondary bg-clip-text text-transparent inline-block
+  @apply inline-block bg-gradient-to-br from-primary to-secondary bg-clip-text text-transparent;
+}
+
+.btn-gradient {
+  @apply bg-gradient-to-br from-primary to-secondary text-black;
+}
+
+.btn-outline-gradient {
+  @apply relative
+  bg-base-100
+  bg-clip-padding
+  border-none
+  font-bold text-primary;
+
+  animation: none;
+}
+
+.btn-outline-gradient::before {
+  content: "";
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  border-radius: 0.5rem;
+  z-index: -1;
+  @apply bg-gradient-to-br from-primary to-secondary;
+}
+
+.btn-outline-gradient:hover {
+  @apply bg-gradient-to-br from-primary to-secondary;
+}
+
+.btn-outline-gradient:hover > * {
+  @apply text-black transition-colors;
 }
