@@ -39,3 +39,16 @@
 .btn-outline-gradient:hover > * {
   @apply text-black transition-colors;
 }
+
+.btn-outline-gradient:disabled {
+  @apply bg-base-100;
+}
+
+.btn-outline-gradient:disabled::before {
+  @apply bg-base-200 opacity-50;
+}
+
+.btn-outline-gradient:disabled > * {
+  @apply opacity-60;
+}
+

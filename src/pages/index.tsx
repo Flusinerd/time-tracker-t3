@@ -1,6 +1,7 @@
 import { useSession } from "next-auth/react";
 import Head from "next/head";
 import Link from "next/link";
+import FullScreenLayout from "../layouts/full-screen";
 
 export default function Home() {
   const { status } = useSession();
@@ -46,3 +47,5 @@ export default function Home() {
     </>
   );
 }
+
+Home.getLayout = (page: React.ReactNode) => <FullScreenLayout>{page}</FullScreenLayout>;

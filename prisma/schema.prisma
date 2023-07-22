@@ -6,24 +6,25 @@ generator client {
 }
 
 datasource db {
-    provider = "postgresql"
-    url      = env("POSTGRES_PRISMA_URL")
-    directUrl = env("POSTGRES_URL_NON_POOLING")
+    provider          = "postgresql"
+    url               = env("POSTGRES_PRISMA_URL")
+    directUrl         = env("POSTGRES_URL_NON_POOLING")
     shadowDatabaseUrl = env("POSTGRES_URL_NON_POOLING")
 }
 
 model TimeTracking {
-    id        String    @id @default(cuid())
-    createdAt DateTime  @default(now())
-    updatedAt DateTime  @updatedAt
-    userId    String
-    start     DateTime
-    end       DateTime?
-    user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-    taskId    String?
-    Task      Task?     @relation(fields: [taskId], references: [id], onDelete: SetNull)
-    projectId String?
-    Project   Project?  @relation(fields: [projectId], references: [id], onDelete: SetNull)
+    id          String    @id @default(cuid())
+    createdAt   DateTime  @default(now())
+    updatedAt   DateTime  @updatedAt
+    userId      String
+    start       DateTime
+    end         DateTime?
+    description String?
+    user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+    taskId      String?
+    Task        Task?     @relation(fields: [taskId], references: [id], onDelete: SetNull)
+    projectId   String?
+    Project     Project?  @relation(fields: [projectId], references: [id], onDelete: SetNull)
 }
 
 model Task {
