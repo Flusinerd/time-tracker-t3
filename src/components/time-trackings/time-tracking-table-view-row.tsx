@@ -23,9 +23,15 @@ const TimeTrackingTableViewRow = ({
           return data.filter((timeTracking) => timeTracking.id !== id);
         }
       });
+      // Check if the deleted time tracking was the running one
+      const runningTimeTracking = utils.timeTrackings.getRunning.getData();
+      if (runningTimeTracking?.id === id) {
+        utils.timeTrackings.getRunning.setData(undefined, () => null);
+      }
     },
     onSettled: async () => {
       await utils.timeTrackings.getOwn.invalidate();
+      await utils.timeTrackings.getRunning.invalidate();
     },
   });
 

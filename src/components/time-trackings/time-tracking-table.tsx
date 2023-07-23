@@ -3,6 +3,7 @@ import { api, type RouterOutputs } from "../../utils/api";
 import { getDurationString } from "./get-duration";
 import TimeTrackingEditRow from "./time-tracking-edit-row";
 import TimeTrackingTableViewRow from "./time-tracking-table-view-row";
+import { useAutoAnimate } from '@formkit/auto-animate/react'
 
 type TimeTrackings = RouterOutputs["timeTrackings"]["getOwn"];
 type TimeTracking = TimeTrackings[0];
@@ -34,6 +35,7 @@ const TimeTrackingTable = ({
   const [timeTrackingsState, setTimeTrackingsState] = useState<
     TimeTrackingWithDuration[]
   >(timeTrackingsWithDuration);
+  const [animationParent] = useAutoAnimate();
 
   useEffect(() => {
     setTimeTrackingsState(timeTrackingsWithDuration);
@@ -132,7 +134,7 @@ const TimeTrackingTable = ({
           <th>Actions</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody ref={animationParent}>
         {timeTrackingsState.map((timeTracking) => {
           if (timeTracking.id !== editTimeTrackingId) {
             return (

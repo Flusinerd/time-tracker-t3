@@ -40,13 +40,14 @@ const TimeTrackingStartStop = ({
   const stopTimeTrackingMutation = api.timeTrackings.stop.useMutation({
     onMutate: async ({ projectId, taskId }) => {
       await utils.timeTrackings.getRunning.cancel();
+      const existing = utils.timeTrackings.getRunning.getData();
       utils.timeTrackings.getRunning.setData(undefined, () => ({
         createdAt: new Date(),
         description: "",
         projectId: projectId,
         taskId: taskId,
         end: new Date(),
-        id: "new123",
+        id: existing?.id ?? "new",
         start: new Date(),
         updatedAt: new Date(),
         userId: "",
@@ -62,9 +63,7 @@ const TimeTrackingStartStop = ({
   const startTimeTrackingMutation = api.timeTrackings.start.useMutation({
     onMutate: async ({ projectId, taskId, description }) => {
       await utils.timeTrackings.getRunning.cancel();
-      const project = projects.find((project) => project.id === projectId);
       const start = new Date();
-      const task = tasks.find((task) => task.id === taskId);
       utils.timeTrackings.getRunning.setData(undefined, () => ({
         createdAt: new Date(),
         description: description ?? "",
@@ -76,29 +75,6 @@ const TimeTrackingStartStop = ({
         updatedAt: new Date(),
         userId: "",
       }));
-      if (!project || !task) {
-        return;
-      }
-      await utils.timeTrackings.getOwn.cancel();
-      utils.timeTrackings.getOwn.setData(undefined, (data) => {
-        const created: RouterOutputs["timeTrackings"]["getOwn"][0] = {
-          createdAt: new Date(),
-          description: description ?? "",
-          projectId: projectId,
-          taskId: taskId,
-          Project: project,
-          Task: task,
-          end: null,
-          id: "new123",
-          start,
-          updatedAt: new Date(),
-          userId: "",
-        };
-        return [
-          created,
-          ...(data ?? []),
-        ] as RouterOutputs["timeTrackings"]["getOwn"];
-      });
     },
     onSettled: async () => {
       await utils.timeTrackings.getRunning.invalidate();

@@ -1,20 +1,23 @@
 import { useSession } from "next-auth/react";
 import Head from "next/head";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { api } from "../../utils/api";
 
 const TasksPage = () => {
   const [name, setName] = useState("");
+  const [editingTaskId, setEditingTaskId] = useState<string | null>(null);
+  const [newName, setNewName] = useState("");
 
   useSession({
     required: true,
   });
 
-  const [editingTaskId, setEditingTaskId] = useState<string | null>(null);
-  const newNameRef = useRef<HTMLInputElement>(null);
-
-  const handleEditClick = (projectId: string) => {
-    setEditingTaskId(projectId);
+  const handleEditClick = (taskId: string) => {
+    setEditingTaskId(taskId);
+    const task = tasksQuery.data?.find((task) => task.id === taskId);
+    if (task) {
+      setNewName(task.name);
+    }
   };
 
   const handleCancelClick = () => {
@@ -29,18 +32,6 @@ const TasksPage = () => {
   const utils = api.useContext();
   const tasksQuery = api.tasks.getAll.useQuery();
   const createTask = api.tasks.create.useMutation({
-    onMutate: async (task) => {
-      await utils.tasks.getAll.cancel();
-      utils.tasks.getAll.setData(undefined, (prev) => {
-        const newProject = {
-          ...task,
-          id: Math.random().toString(36).substr(2, 9),
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        };
-        return prev ? [...prev, newProject] : [newProject];
-      });
-    },
     onSettled: async () => {
       await utils.tasks.getAll.invalidate();
     },
@@ -49,7 +40,7 @@ const TasksPage = () => {
     onMutate: async (id) => {
       await utils.tasks.getAll.cancel();
       utils.tasks.getAll.setData(undefined, (prev) => {
-        return prev?.filter((project) => project.id !== id);
+        return prev?.filter((task) => task.id !== id);
       });
     },
     onSettled: async () => {
@@ -60,10 +51,10 @@ const TasksPage = () => {
     onMutate: async (task) => {
       await utils.tasks.getAll.cancel();
       utils.tasks.getAll.setData(undefined, (prev) => {
-        return prev?.map((prevProject) =>
-          prevProject.id === task.id
-            ? { ...prevProject, ...task, updatedAt: new Date() }
-            : prevProject
+        return prev?.map((prevTask) =>
+          prevTask.id === task.id
+            ? { ...prevTask, ...task, updatedAt: new Date() }
+            : prevTask
         );
       });
     },
@@ -87,6 +78,27 @@ const TasksPage = () => {
       </Head>
       <div className="flex flex-col gap-4">
         <h1 className="gradient-text ml-3 text-4xl font-bold">Tasks</h1>
+        <form className="mr-4 flex items-end justify-between">
+          <div className="form-control">
+            <label className="label">
+              <span className="label-text">Name</span>
+            </label>
+            <input
+              type="text"
+              className="input input-bordered input-primary"
+              placeholder="Task Name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+          </div>
+          <button
+            className="btn-outline-gradient btn"
+            disabled={name.length === 0}
+            onClick={() => createTask.mutate({ name })}
+          >
+            Create
+          </button>
+        </form>
         <table className="table mt-8">
           <thead>
             <tr>
@@ -97,27 +109,6 @@ const TasksPage = () => {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>
-                <input
-                  type="text"
-                  className="input input-bordered input-primary input-sm"
-                  placeholder="Task Name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                />
-              </td>
-              <td></td>
-              <td></td>
-              <td>
-                <button
-                  className="btn btn-primary btn-xs"
-                  onClick={() => createTask.mutate({ name })}
-                >
-                  Create
-                </button>
-              </td>
-            </tr>
             {tasksQuery.data?.map((task) => (
               <tr key={task.id}>
                 <td>
@@ -125,38 +116,34 @@ const TasksPage = () => {
                     <form
                       onSubmit={(e) => {
                         e.preventDefault();
-                        handleSaveClick(
-                          task.id,
-                          newNameRef.current?.value ?? ""
-                        );
+                        handleSaveClick(task.id, newName);
                       }}
                     >
                       <input
                         type="text"
                         className="input input-bordered input-primary input-sm"
                         name="name"
-                        defaultValue={task.name}
+                        value={newName}
+                        onChange={(e) => setNewName(e.target.value)}
                         autoFocus
-                        ref={newNameRef}
                       />
                     </form>
                   ) : (
                     task.name
                   )}
                 </td>
-                <td>{task.createdAt.toLocaleDateString()}</td>
-                <td>{task.updatedAt.toLocaleDateString()}</td>
+                <td suppressHydrationWarning>
+                  {task.createdAt.toLocaleDateString()}
+                </td>
+                <td suppressHydrationWarning>
+                  {task.updatedAt.toLocaleDateString()}
+                </td>
                 <td className="flex gap-2">
                   {editingTaskId === task.id ? (
                     <>
                       <button
                         className="btn btn-primary btn-xs"
-                        onClick={() =>
-                          handleSaveClick(
-                            task.id,
-                            newNameRef.current?.value ?? ""
-                          )
-                        }
+                        onClick={() => handleSaveClick(task.id, newName)}
                       >
                         Save
                       </button>

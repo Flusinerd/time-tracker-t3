@@ -33,6 +33,9 @@ export const getEditDuration = (
   end: string,
   date: string
 ): string => {
+  if (!end) {
+    return "-";
+  }
   const startDate = getStartDate(start, date);
   const endDate = getEndDate(end, date, start);
   return getDurationString(startDate, endDate);

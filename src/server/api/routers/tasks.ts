@@ -3,7 +3,7 @@ import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const tasksRouter = createTRPCRouter({
   getAll: protectedProcedure.query(({ ctx }) => {
-    return ctx.prisma.task.findMany();
+    return ctx.prisma.task.findMany({ orderBy: { name: 'asc' } });
   }
   ),
   create: protectedProcedure.input(
