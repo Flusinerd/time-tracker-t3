@@ -20,11 +20,18 @@ const Home = () => {
         }
       `}</style>
       <Head>
-        <title>Timetracker</title>
+        <title>Time Tracker</title>
+        <meta name="description" content="Time Trackings" />
         <link rel="icon" href="/favicon.ico" />
+
+        <meta property="og:title" content="Time Trackings" />
+        <meta property="og:description" content="Time Trackings" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://timetracker.jan-krueger.eu/" />
+        <meta property="og:image" content="/og-image.png" />
       </Head>
       <main className="relative flex h-full flex-col items-center gap-4 p-4">
-        <h1 className="gradient-text font-bold text-6xl">
+        <h1 className="gradient-text text-6xl font-bold">
           Welcome to THDS Timetracker
         </h1>
         {status === "authenticated" && (
@@ -46,8 +53,10 @@ const Home = () => {
       </main>
     </>
   );
-}
+};
 
-Home.getLayout = (page: React.ReactNode) => <FullScreenLayout>{page}</FullScreenLayout>;
+Home.getLayout = (page: React.ReactNode) => (
+  <FullScreenLayout>{page}</FullScreenLayout>
+);
 
 export default Home;

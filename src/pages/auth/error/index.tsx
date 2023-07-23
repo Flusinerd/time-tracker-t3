@@ -1,9 +1,11 @@
 import { useRouter } from "next/router";
 import Card from "../../../components/card";
+import FullScreenLayout from "../../../layouts/full-screen";
+import Link from "next/link";
 
 type Error = 'Configuration' | 'AccessDenied' | 'Verification' | 'Default'
 
-export default function Error() {
+const Error = () => {
   const router = useRouter();
   const { error } = router.query;
   // Generate a error message based on the error code (next-auth)
@@ -15,6 +17,14 @@ export default function Error() {
       <Card>
         <h1 className="text-4xl font-bold">Error</h1>
         <p className="mt-4 text-2xl">{errorMessage}</p>
+        <Link
+          href="/"
+          className="btn btn-outline btn-secondary mt-auto"
+        > <span>
+          Go back to home
+
+        </span>
+        </Link>
       </Card>
     </main>
   </>
@@ -33,3 +43,7 @@ function generateErrorMessage(error: Error): string {
       return 'An unknown error has occurred.'
   }
 }
+
+Error.getLayout = (page: React.ReactNode) => <FullScreenLayout>{page}</FullScreenLayout>;
+
+export default Error;
