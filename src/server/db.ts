@@ -113,13 +113,18 @@ const calculateWorkTime = async (timeTracking: TimeTracking, mode: 'upsert' | 'd
       },
     });
   } else {
+    const user = await prisma.user.findUniqueOrThrow({
+      where: {
+        id: userId,
+      },
+    });
     await prisma.workTimeCache.create({
       data: {
         userId,
         month,
         year,
         actualInSec: monthTotal,
-        requiredInSec: 0,
+        requiredInSec: user.WorkHoursPerMonth * 60 * 60,
       },
     });
   }

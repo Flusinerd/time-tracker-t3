@@ -2,6 +2,7 @@ import { createTRPCRouter } from "~/server/api/trpc";
 import { projectsRouter } from "./routers/projects";
 import { tasksRouter } from "./routers/tasks";
 import { timeTrackingsRouter } from "./routers/time-trackings";
+import { workTimeCacheRouter } from "./routers/work-time-cache";
 
 /**
  * This is the primary router for your server.
@@ -11,7 +12,8 @@ import { timeTrackingsRouter } from "./routers/time-trackings";
 export const appRouter = createTRPCRouter({
   projects: projectsRouter,
   tasks: tasksRouter,
-  timeTrackings: timeTrackingsRouter
+  timeTrackings: timeTrackingsRouter,
+  workTimeCache: workTimeCacheRouter,
 });
 
 // export type definition of API
